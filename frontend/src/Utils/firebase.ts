@@ -3,18 +3,11 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import Firebase_config from "../secrets.json";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCagjmI4mZdA_ZoAx0T_kpjXnYsNUvxm2g",
-  authDomain: "hackthevalley-8b71c.firebaseapp.com",
-  projectId: "hackthevalley-8b71c",
-  storageBucket: "hackthevalley-8b71c.appspot.com",
-  messagingSenderId: "813783062225",
-  appId: "1:813783062225:web:bf56a3b2a600cf6f6417f0",
-  measurementId: "G-5BFLJL6KFN"
-};
+const firebaseConfig = Firebase_config.Firebase_Config
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

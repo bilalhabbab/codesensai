@@ -4,9 +4,7 @@ import { Flex, useColorModeValue } from '@chakra-ui/react'
 
 const Solving = () => {
   return (
-    <div>
       <CodeBox />
-    </div>
   )
 }
 

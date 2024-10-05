@@ -9,7 +9,7 @@ const CODE_TEMPLATES = {
   console.log("Hello, " + name + "!");
   }
       
-  greet("Paul");
+greet("Paul");
   `,
   typescript: `type Params = {
   name: string;
@@ -45,10 +45,10 @@ function CodeBox() {
 
   return (
     <>
-    <Flex color={useColorModeValue('black', 'white')} flexDir='column' py={8}>
-      <Box w="48%">
+    <Flex color={useColorModeValue('black', 'white')} bgColor={useColorModeValue('white', '#1e1e1e')} flexDir='column' w="50%" borderRadius='20px' p={5}>
+      <Box height="70%">
         <LangSwitch language={language} onSelect={handleLanguageChange} />
-        <Editor height="90vh" theme={useColorModeValue('vs-light', 'vs-dark')} options={{minimap: { enabled: false },}} language={language} value={code} ref={editorRef} onMount={handleEditorMount}/>
+        <Editor height="50vh" theme={useColorModeValue('vs-light', 'vs-dark')} options={{minimap: { enabled: false }, }} language={language} value={code} ref={editorRef} onMount={handleEditorMount}/>
       </Box>
       {<Output editorRef={editorRef} language={language} />}
     </Flex>
