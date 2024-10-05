@@ -23,7 +23,7 @@ const Output = ({ editorRef, language }) => {
     }
   };
   return (
-    <Box w="48%">
+    <Box w="100%">
       <Text mb={2} fontSize="lg">
         Output
       </Text>
@@ -37,13 +37,13 @@ const Output = ({ editorRef, language }) => {
         Run Code
       </Button>
       <Box
-        height="75vh"
+        height="25vh"
         p={2}
-        border="1px solid"
         borderRadius={4}
-        borderColor={useColorModeValue("black", "gray.300")}
-        color={useColorModeValue("white", "black")}
-        bg={useColorModeValue("black", "white")}
+        color="white"
+        bg='black'
+        whiteSpace="pre-wrap"
+        overflow='auto'
       >
         <Text>{output}</Text>
       </Box>

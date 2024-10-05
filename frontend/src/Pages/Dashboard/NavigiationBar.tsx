@@ -103,8 +103,8 @@ export const NavBar = () => {
           <Text
               textTransform={'uppercase'}
               display="inline-block"
-              fontSize="20"
-              bgGradient="linear(to-r, brand.200, brand.300)"
+              fontSize="28px"
+              bgGradient="linear(to-r, #1100ff, #6300bf)"
               backgroundClip="text"
               p={2}
               alignSelf={'flex-start'}
@@ -134,7 +134,7 @@ export const NavBar = () => {
                   cursor={'pointer'}
                   minW={0}>
                   <Avatar
-                    size={'sm'}
+                    size={'xs'}
                     src={user?.photoURL!}
                   />
                 </MenuButton>

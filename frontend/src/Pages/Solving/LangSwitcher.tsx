@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  Box,
   Button,
+  Flex,
   Menu,
   MenuButton,
   MenuItem,
@@ -23,12 +23,9 @@ interface LangSwitchProps {
 const LangSwitch = ({ language, onSelect } : LangSwitchProps) => {
     const languages = Object.entries(LANG_VERSIONS);
     return (
-      <Box ml={2} mb={4}>
-        <Text mb={2} fontSize="lg">
-          Language:
-        </Text>
+      <Flex w='100%' mb={1} justifyItems='center' >
         <Menu>
-          <MenuButton as={Button}>{language}</MenuButton>
+          <MenuButton as={Button} h="30px" fontSize='sm'>{language} ∨</MenuButton>
           <MenuList>
             {languages.map(([language, version]) => (
               <MenuItem key={language} onClick={() => onSelect(language)}>
@@ -40,7 +37,7 @@ const LangSwitch = ({ language, onSelect } : LangSwitchProps) => {
             ))}
           </MenuList>
         </Menu>
-      </Box>
+      </Flex>
     );
   };
   export default LangSwitch;

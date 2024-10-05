@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { Editor } from "@monaco-editor/react";
 import LangSwitch from "./LangSwitcher";
 import Output from "./Output";
@@ -9,7 +9,7 @@ const CODE_TEMPLATES = {
   console.log("Hello, " + name + "!");
   }
       
-  greet("Paul");
+greet("Paul");
   `,
   typescript: `type Params = {
   name: string;
@@ -45,11 +45,13 @@ function CodeBox() {
 
   return (
     <>
-    <Box w="48%">
-      <LangSwitch language={language} onSelect={handleLanguageChange} />
-      <Editor height="90vh" theme={useColorModeValue('vs-light', 'vs-dark')} options={{minimap: { enabled: false },}} language={language} value={code} ref={editorRef} onMount={handleEditorMount}/>
-    </Box>
-    {<Output editorRef={editorRef} language={language} />}
+    <Flex color={useColorModeValue('black', 'white')} bgColor={useColorModeValue('white', '#1e1e1e')} flexDir='column' w="50%" borderRadius='20px' p={5}>
+      <Box height="70%">
+        <LangSwitch language={language} onSelect={handleLanguageChange} />
+        <Editor height="50vh" theme={useColorModeValue('vs-light', 'vs-dark')} options={{minimap: { enabled: false }, }} language={language} value={code} ref={editorRef} onMount={handleEditorMount}/>
+      </Box>
+      {<Output editorRef={editorRef} language={language} />}
+    </Flex>
     </>
   );
 }
