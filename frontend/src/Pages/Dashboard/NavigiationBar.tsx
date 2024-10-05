@@ -68,6 +68,9 @@ export const NavBar = () => {
     navigate("/login")
   }
 
+  const profileRedirect = () => {
+    navigate("/profile")
+  }
 
 
   return (
@@ -149,6 +152,7 @@ export const NavBar = () => {
                   </Center>
                   <br />
                   <MenuDivider />
+                  <MenuItem onClick={()=>{profileRedirect()}}>Profile</MenuItem>
                   <MenuItem onClick={()=>{FirebaseServices.sign_out(); logInRedirect()}}>Logout</MenuItem>
                 </MenuList>
               </Menu>
@@ -311,5 +315,9 @@ const NAV_ITEMS_FOR_ANONYMOUS_USER: Array<NavItem> = [
   {
     label: 'Home',
     route: 'home'
+  },
+  {
+    label: 'Problems',
+    route: 'problems'
   },
 ]

@@ -29,14 +29,14 @@ export const LoginBox = (props: any) => {
                   <Stack spacing="6">
                     <HStack>
                       <Divider />
-                      <Text fontSize="5vh" whiteSpace="nowrap" color="black">
+                      <Text fontSize="5vh" whiteSpace="nowrap" color={useColorModeValue("black", "white")}>
                         Log In
                       </Text>
                       <Divider />
                     </HStack>
                     <HStack justifyContent="center">
-                      <Text fontSize="3vh" whiteSpace="nowrap" color="red">
-                        To enjoy all of our cool features ✌️
+                      <Text fontSize="3vh" whiteSpace="nowrap" color={useColorModeValue('red', 'white')}>
+                        And Exponentialy Grow Your Skills
                       </Text>
                     </HStack>
                     <HStack />
