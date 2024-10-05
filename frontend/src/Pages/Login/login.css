@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+.warehouse-mobile {
+    width: 80vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    filter:opacity(0.2);
+}
+
+.page-browser {
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items:center;
+}
+
+.loginBox{
+  margin: 0;
+}
+
+.warehouse-browser {
+  width: 40vw;
+  filter:opacity(0.2);
+}
