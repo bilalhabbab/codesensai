@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { Editor } from "@monaco-editor/react";
 import LangSwitch from "./LangSwitcher";
 import Output from "./Output";
@@ -45,11 +45,13 @@ function CodeBox() {
 
   return (
     <>
-    <Box w="48%">
-      <LangSwitch language={language} onSelect={handleLanguageChange} />
-      <Editor height="90vh" theme={useColorModeValue('vs-light', 'vs-dark')} options={{minimap: { enabled: false },}} language={language} value={code} ref={editorRef} onMount={handleEditorMount}/>
-    </Box>
-    {<Output editorRef={editorRef} language={language} />}
+    <Flex color={useColorModeValue('black', 'white')} flexDir='column' py={8}>
+      <Box w="48%">
+        <LangSwitch language={language} onSelect={handleLanguageChange} />
+        <Editor height="90vh" theme={useColorModeValue('vs-light', 'vs-dark')} options={{minimap: { enabled: false },}} language={language} value={code} ref={editorRef} onMount={handleEditorMount}/>
+      </Box>
+      {<Output editorRef={editorRef} language={language} />}
+    </Flex>
     </>
   );
 }

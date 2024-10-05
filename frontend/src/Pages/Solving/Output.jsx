@@ -44,6 +44,7 @@ const Output = ({ editorRef, language }) => {
         borderColor={useColorModeValue("black", "gray.300")}
         color={useColorModeValue("white", "black")}
         bg={useColorModeValue("black", "white")}
+        whiteSpace="pre-wrap"
       >
         <Text>{output}</Text>
       </Box>
