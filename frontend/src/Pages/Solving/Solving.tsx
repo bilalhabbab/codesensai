@@ -153,6 +153,7 @@ const Solving = () => {
         <Text fontSize="3xl" fontWeight='bold'>Problem {number}: {name}</Text>
         <HStack>
           <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme={badgecolor}>{difficulty}</Badge>
+          <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='red'>{difficulty}</Badge>
           <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='gray'>{type}</Badge>
         </HStack>
         <Text fontSize="lg" mb={4}>{task}</Text>
