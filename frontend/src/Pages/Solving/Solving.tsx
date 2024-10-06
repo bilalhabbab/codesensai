@@ -32,6 +32,7 @@ const Solving = () => {
   const { number } = useParams(); // Get the problem number from the URL
   const { state } = useLocation(); // Get the problem details from the navigate state
   const { name, task, difficulty, type } = state; // Destructure the problem details
+  const badgecolor = difficulty === 'Easy' ? 'green' : difficulty === 'Medium' ? 'yellow' : 'red';
 
   const [code, setCode] = useState(CODE_TEMPLATES.javascript);
 
@@ -151,6 +152,7 @@ const Solving = () => {
       <VStack spacing={4} mt={4} mb={10} p={5} align='flex-start' color={useColorModeValue('black', 'white')} bgColor={useColorModeValue('white', '#1e1e1e')}>
         <Text fontSize="3xl" fontWeight='bold'>Problem {number}: {name}</Text>
         <HStack>
+          <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme={badgecolor}>{difficulty}</Badge>
           <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='red'>{difficulty}</Badge>
           <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='gray'>{type}</Badge>
         </HStack>
