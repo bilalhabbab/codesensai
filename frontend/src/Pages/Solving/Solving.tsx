@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import CodeBox from './CodeBox';
 import { useTimer } from 'react-timer-hook';
-import { Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, Select } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { Badge, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
-const CODE_TEMPLATES: Record<'javascript' | 'typescript' | 'python', string> = {
+const CODE_TEMPLATES = {
   javascript: `function greet(name) {
   console.log("Hello, " + name + "!");
-}
+  }
       
 greet("Paul");
-`,
+  `,
   typescript: `type Params = {
   name: string;
 };
@@ -20,19 +20,20 @@ function greet(data: Params) {
 }
       
 greet({ name: "Paul" });
-`,
+  `,
   python: `def greet(name):
   print("Hello, " + name + "!")
       
 greet("Paul")
-`,
+  `,
 };
 
-const Solving = ({ submitCode }: { submitCode: (language: string, problemDescription: string, userCode: string) => Promise<void> }) => {
+const Solving = () => {
+  const { number } = useParams(); // Get the problem number from the URL
+  const { state } = useLocation(); // Get the problem details from the navigate state
+  const { name, task, difficulty, type } = state; // Destructure the problem details
+
   const [code, setCode] = useState(CODE_TEMPLATES.javascript);
-  const [language, setLanguage] = useState<'javascript' | 'typescript' | 'python'>('javascript'); // Default to JavaScript
-  const [evaluationResult, setEvaluationResult] = useState(null); // Stores the evaluation result
-  const [errorMessage, setErrorMessage] = useState('');
 
   let navigate = useNavigate();
 
@@ -48,26 +49,20 @@ const Solving = ({ submitCode }: { submitCode: (language: string, problemDescrip
 
   const onTimeOverClose = () => {
     setIsTimeOver(false);
-    navigate('/results', { state: { code, evaluationResult } }); // Pass the result to the results page
+    navigate(`/results/${number}`, { state: { code, task } });
   };
 
-  const onSubmitClick = async () => {
+  const onSubmitClick = () => {
     setIsSubmitted(true);
-
-    try {
-      await submitCode(language, "Your task description here", code); // Submits the code for evaluation
-      setIsSubmitted(false); // Close the modal after submission
-      onTimeOverClose(); // Navigate to results
-    } catch (error) {
-      console.error('Error during code evaluation:', error);
-      setErrorMessage('There was an error evaluating your code. Please try again.');
-    }
   };
 
-  const onLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedLanguage = e.target.value as 'javascript' | 'typescript' | 'python'; // Type assertion
-    setLanguage(selectedLanguage);
-    setCode(CODE_TEMPLATES[selectedLanguage]); // Update the code template based on selected language
+  const onSubmittedClose = () => {
+    setIsSubmitted(false);
+  };
+
+  const onConfirmSubmit = () => {
+    setIsSubmitted(false);
+    onTimeOverClose();
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -76,9 +71,14 @@ const Solving = ({ submitCode }: { submitCode: (language: string, problemDescrip
   }, []);
 
   const {
+    totalSeconds,
     seconds,
     minutes,
+    isRunning,
     start,
+    pause,
+    resume,
+    restart,
   } = useTimer({ expiryTimestamp: fortyMins, onExpire: () => onTimeOver(), autoStart: false });
 
   const onContinue = () => {
@@ -94,29 +94,31 @@ const Solving = ({ submitCode }: { submitCode: (language: string, problemDescrip
           <ModalBody pb={6}>
             <Text>
               You will have 40 minutes to complete the task. Upon submission, or 
-              when the time runs out, your code will be evaluated. You will be given
+              when the time runs out, your code will be evaluated. you will be given
               feedback based on your comments, efficiency, and readability.
               Make sure you write down your comments as if you are explaining
               your code to the interviewer. Good Luck!
             </Text>
           </ModalBody>
+
           <ModalFooter>
-            <Button onClick={() => { onClose(); onContinue(); }} colorScheme='blue' mr='auto' ml='auto'>
+            <Button onClick={() => {onClose(); onContinue();}} colorScheme='blue' mr='auto' ml='auto'>
               Let's Go!
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-
+      
       <Modal closeOnOverlayClick={false} isOpen={isTimeOver} onClose={onTimeOverClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Time's up!</ModalHeader>
+          <ModalHeader>Tiiiimmes up!</ModalHeader>
           <ModalBody pb={6}>
             <Text>
               Now press continue, and your results will be displayed in a few moments.
             </Text>
           </ModalBody>
+
           <ModalFooter>
             <Button onClick={onTimeOverClose} colorScheme='blue' mr='auto' ml='auto'>
               Continue!
@@ -125,36 +127,37 @@ const Solving = ({ submitCode }: { submitCode: (language: string, problemDescrip
         </ModalContent>
       </Modal>
 
-      <Modal closeOnOverlayClick={true} isOpen={isSubmitted} onClose={() => setIsSubmitted(false)}>
+      <Modal closeOnOverlayClick={true} isOpen={isSubmitted} onClose={onSubmittedClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Confirm Submission</ModalHeader>
           <ModalBody pb={6}>
-            <Text>Are you sure you want to submit your code for evaluation?</Text>
+            <Text>
+              We just wanna make sure that you are acc serious about submitting.
+            </Text>
           </ModalBody>
+
           <ModalFooter>
-            <Button onClick={() => setIsSubmitted(false)} colorScheme='red' mr='auto' ml='auto'>
-              No, go back!
+            <Button onClick={onSubmittedClose} colorScheme='red' mr='auto' ml='auto'>
+              Nooo!
             </Button>
-            <Button onClick={onSubmitClick} colorScheme='green' mr='auto' ml='auto'>
-              Yes, submit!
+            <Button onClick={onConfirmSubmit} colorScheme='green' mr='auto' ml='auto'>
+              Continue!
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
 
-      <HStack spacing={4} mt={5}>
-        <Text fontSize="lg">Select Language:</Text>
-        <Select value={language} onChange={onLanguageChange}>
-          <option value="javascript">JavaScript</option>
-          <option value="typescript">TypeScript</option>
-          <option value="python">Python</option>
-        </Select>
-      </HStack>
+      <VStack spacing={4} mt={4} mb={10} p={5} align='flex-start' color={useColorModeValue('black', 'white')} bgColor={useColorModeValue('white', '#1e1e1e')}>
+        <Text fontSize="3xl" fontWeight='bold'>Problem {number}: {name}</Text>
+        <HStack>
+          <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='red'>{difficulty}</Badge>
+          <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='gray'>{type}</Badge>
+        </HStack>
+        <Text fontSize="lg" mb={4}>{task}</Text>
+      </VStack>
 
       <CodeBox minutes={minutes} seconds={seconds} code={code} setCode={setCode} onSubmit={onSubmitClick} />
-
-      {errorMessage && <Text color="red">{errorMessage}</Text>}
     </>
   );
 };
