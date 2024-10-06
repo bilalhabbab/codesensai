@@ -4,10 +4,13 @@ import { useLocation } from 'react-router-dom';
 
 const Results = () => {
   const location = useLocation();
-  const { code } = location.state || { code: '' };
+  const { code, task } = location.state || { code: '', task: '' };
 
   return (
-    <Container whiteSpace="pre-wrap">{code}</Container>
+    <>
+        <Container whiteSpace="pre-wrap" mb={5}>{code}</Container>
+        <Container whiteSpace="pre-wrap">{task}</Container>
+    </>
   );
 };
 

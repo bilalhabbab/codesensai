@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import CodeBox from './CodeBox'
+import React, { useEffect, useState } from 'react';
+import CodeBox from './CodeBox';
 import { useTimer } from 'react-timer-hook';
-import { Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { Badge, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const CODE_TEMPLATES = {
   javascript: `function greet(name) {
@@ -29,6 +29,9 @@ greet("Paul")
 };
 
 const Solving = () => {
+  const { number } = useParams(); // Get the problem number from the URL
+  const { state } = useLocation(); // Get the problem details from the navigate state
+  const { name, task, difficulty, type } = state; // Destructure the problem details
 
   const [code, setCode] = useState(CODE_TEMPLATES.javascript);
 
@@ -37,34 +40,35 @@ const Solving = () => {
   const fortyMins = new Date();
   fortyMins.setMinutes(fortyMins.getMinutes() + 40);
 
-  const [isTimeOver, setIsTimeOver] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isTimeOver, setIsTimeOver] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const onTimeOver = () => {
-    setIsTimeOver(true)
-  }
-  
+    setIsTimeOver(true);
+  };
+
   const onTimeOverClose = () => {
     setIsTimeOver(false);
-    navigate('/results', { state: { code } });
-  }
+    navigate(`/results/${number}`, { state: { code, task } });
+  };
 
   const onSubmitClick = () => {
-    setIsSubmitted(true)
-  }
+    setIsSubmitted(true);
+  };
 
   const onSubmittedClose = () => {
-    setIsSubmitted(false)
-  }
+    setIsSubmitted(false);
+  };
 
   const onConfirmSubmit = () => {
-    setIsSubmitted(false)
-    onTimeOverClose()
-  }
+    setIsSubmitted(false);
+    onTimeOverClose();
+  };
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  useEffect(() => { onOpen() }, [])
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  useEffect(() => {
+    onOpen();
+  }, []);
 
   const {
     totalSeconds,
@@ -77,10 +81,9 @@ const Solving = () => {
     restart,
   } = useTimer({ expiryTimestamp: fortyMins, onExpire: () => onTimeOver(), autoStart: false });
 
-
   const onContinue = () => {
-    start()
-  }
+    start();
+  };
 
   return (
     <>
@@ -99,7 +102,7 @@ const Solving = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={() => {onClose(); onContinue()}} colorScheme='blue' mr='auto' ml='auto'>
+            <Button onClick={() => {onClose(); onContinue();}} colorScheme='blue' mr='auto' ml='auto'>
               Let's Go!
             </Button>
           </ModalFooter>
@@ -144,9 +147,19 @@ const Solving = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <CodeBox minutes={minutes} seconds={seconds} code={code} setCode={setCode} onSubmit={onSubmitClick}/>
-    </>
-  )
-}
 
-export default Solving
+      <VStack spacing={4} mt={4} mb={10} p={5} align='flex-start' color={useColorModeValue('black', 'white')} bgColor={useColorModeValue('white', '#1e1e1e')}>
+        <Text fontSize="3xl" fontWeight='bold'>Problem {number}: {name}</Text>
+        <HStack>
+          <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='red'>{difficulty}</Badge>
+          <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='gray'>{type}</Badge>
+        </HStack>
+        <Text fontSize="lg" mb={4}>{task}</Text>
+      </VStack>
+
+      <CodeBox minutes={minutes} seconds={seconds} code={code} setCode={setCode} onSubmit={onSubmitClick} />
+    </>
+  );
+};
+
+export default Solving;

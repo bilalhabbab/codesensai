@@ -44,8 +44,8 @@ export const App = () => {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/problems" element={<Problems />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/solving" element={<Solving />} />
-            <Route path="/results" element={<Results />} />
+            <Route path="/solving/:number" element={<Solving />} />
+            <Route path="/results/:number" element={<Results />} />
             <Route path="/random" element={<Random />} />
           </Route>
           <Route path="*" element={<NotFound />} />
