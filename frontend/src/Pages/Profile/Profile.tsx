@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Box, Text, Avatar, Stack, Heading, Spinner, Center } from '@chakra-ui/react';
+import { Box, Text, Avatar, Stack, Heading, Spinner, Center, Container, HStack, Divider } from '@chakra-ui/react';
 import { useColorModeValue } from '@chakra-ui/react';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../../Utils/firebase'; // Assuming firebase.tsx is in the same directory
@@ -40,11 +40,24 @@ const Profile = () => {
         setError("User not authenticated");
       }
     });
-
     // Cleanup the listener on unmount
     return () => unsubscribe();
   }, []);
   const color = useColorModeValue('white', 'gray.900');
+  const color1 = useColorModeValue('gray.300', 'gray.600');
+  const color2 = useColorModeValue('gray.100', 'gray.500');
+  let total = 0
+  let count = 0
+  const problems = Object.keys(profileData?.problems).map((problem: any, index: number) => {
+    total += profileData.problems[problem]
+    count += 1
+    return (
+      <Box key={problem} bgColor={index % 2 === 1 ? color1 : color2} p={3}>
+        <Text fontSize='xl'>Problem {problem}: {profileData.problems[problem]}%</Text>
+      </Box>
+    );
+  })
+  const average = total/count
   return (
     <>
     {loading ? 
@@ -58,7 +71,7 @@ const Profile = () => {
       </Center>
     
     : 
-    <Center py={6}>
+    <HStack py={6}>
       <Box
         maxW={'320px'}
         w={'full'}
@@ -84,8 +97,21 @@ const Profile = () => {
             Joined on: {profileData?.createdAt?.toDate().toLocaleDateString()}
           </Text>
         </Stack>
+        <Box p={6}>
+          <Text fontSize={'2xl'} fontWeight='bold' mb={2}>Average Score</Text>
+          <Text fontSize={'xl'}>{average.toFixed(2)}%</Text>
+        </Box>
       </Box>
-    </Center>}
+      <Box 
+        w='30vw'
+        ml={10}
+        >
+        <Stack px={0} py={6}>
+          <Text fontSize={'5xl'} fontWeight='bold' mb={2}>Problems Solved</Text>
+          {problems}
+        </Stack>
+      </Box>
+    </HStack>}
     </>
   );
 };
