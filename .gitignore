@@ -1,3 +1,5 @@
 /frontend/node_modules
 /frontend/src/secrets.json
 /backend/.env
+/backend/secrets.json
+/backend/node_modules

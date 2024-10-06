@@ -42,6 +42,7 @@ export const signInWithGooglePopup = async () => {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName,
+        problems: {},
         photoURL: user.photoURL,
         createdAt: new Date(),
       });

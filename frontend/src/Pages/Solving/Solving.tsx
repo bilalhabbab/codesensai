@@ -29,7 +29,7 @@ greet("Paul")
 };
 
 const Solving = () => {
-  const { number } = useParams(); // Get the problem number from the URL
+  const { number } : any = useParams(); // Get the problem number from the URL
   const { state } = useLocation(); // Get the problem details from the navigate state
   const { name, task, difficulty, type } = state; // Destructure the problem details
   const badgecolor = difficulty === 'Easy' ? 'green' : difficulty === 'Medium' ? 'yellow' : 'red';
@@ -39,8 +39,11 @@ const Solving = () => {
   let navigate = useNavigate();
 
   const fortyMins = new Date();
-  fortyMins.setMinutes(fortyMins.getMinutes() + 40);
-
+  if (parseInt(number) === 0){
+  fortyMins.setMinutes(fortyMins.getSeconds() + 20);
+  } else {
+  fortyMins.setMinutes(fortyMins.getMinutes() + 25);
+  }
   const [isTimeOver, setIsTimeOver] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -50,7 +53,7 @@ const Solving = () => {
 
   const onTimeOverClose = () => {
     setIsTimeOver(false);
-    navigate(`/results/${number}`, { state: { code, task } });
+    navigate(`/results/${number}`, { state: { code, task, number } });
   };
 
   const onSubmitClick = () => {
@@ -153,7 +156,6 @@ const Solving = () => {
         <Text fontSize="3xl" fontWeight='bold'>Problem {number}: {name}</Text>
         <HStack>
           <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme={badgecolor}>{difficulty}</Badge>
-          <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='red'>{difficulty}</Badge>
           <Badge fontSize="xs" mb={4} p={1} borderRadius='1px' colorScheme='gray'>{type}</Badge>
         </HStack>
         <Text fontSize="lg" mb={4}>{task}</Text>

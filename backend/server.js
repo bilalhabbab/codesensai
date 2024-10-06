@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import OpenAI from 'openai';
+import secrets from './secrets.json' assert { type: 'json' };
 
 // Load environment variables
 dotenv.config();
@@ -18,7 +19,7 @@ app.get('/healthcheck', (req, res) => {
 
 // Initialize OpenAI client
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: secrets.open_ai,
 });
 
 // API endpoint for evaluating code
@@ -34,12 +35,12 @@ app.post('/evaluate-code', async (req, res) => {
     try {
       // Create the prompt for OpenAI
       const prompt = `
-  Using the ${coding_language} language with the following task:
+  Assuming the following task:
   ${task_description}
   
   Rate the following code:
   
-  \`\`\`${coding_language}
+  \`\`\`
   ${user_input}
   \`\`\`
   
@@ -51,10 +52,11 @@ app.post('/evaluate-code', async (req, res) => {
     "storage_complexity": 1-100,
     "readability": 1-100,
     "overall": 1-100,
-    "thoughts": "Your overall thoughts on the code. Write a sentence or two (feel free to write more if needed) for each topic."
+    "thoughts": "Your overall thoughts on the code. Write a sentence or two (feel free to write more if needed) for each topic. MAKE SURE THIS IS A STRING"
   }
   
-  Only provide the JSON response without any additional text.
+  If the code is not doing the task that is required, deduct 35% points from all the scores, be very harsh if the code is not doing what the tasks asks it to do.
+  Make sure to only provide the JSON response without any additional text, make sure the values in the JSON are either integers or strings NOTHING ELSE.
   `;
   
       // Call OpenAI API
