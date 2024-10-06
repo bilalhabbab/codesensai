@@ -1,12 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"; // Add Firestore functions
 import Firebase_config from "../secrets.json";
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = Firebase_config.Firebase_Config
 
 // Initialize Firebase
@@ -15,29 +14,67 @@ const analytics = getAnalytics(app);
 
 // Initialize Firebase Auth provider
 const provider = new GoogleAuthProvider();
-  
+
 // whenever a user interacts with the provider, we force them to select an account
 provider.setCustomParameters({   
-    prompt : "select_account "
+    prompt: "select_account"
 });
-export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
-export const currentUser = auth.currentUser;
 
-// Export firestore database
-// It will be imported into your react app whenever it is needed
+export const auth = getAuth();
 export const db = getFirestore(app);
 
+// Function to handle Google sign-in and Firestore user creation
+export const signInWithGooglePopup = async () => {
+  try {
+    // Sign in with Google
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
+    // Reference to the user document in Firestore
+    const userRef = doc(db, "users", user.uid);
+
+    // Check if the user already exists in Firestore
+    const userDoc = await getDoc(userRef);
+
+    // If the user doesn't exist, create a new document
+    if (!userDoc.exists()) {
+      await setDoc(userRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        createdAt: new Date(),
+      });
+      console.log("User added to Firestore!");
+    } else {
+      console.log("User already exists in Firestore.");
+    }
+  } catch (error) {
+    console.error("Error logging in or adding user to Firestore:", error);
+  }
+};
+
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log("Firebase Auth persistence set to 'local'.");
+  })
+  .catch((error) => {
+    console.error("Error setting Firebase Auth persistence:", error);
+  });
+
+// Current user
+export const currentUser = auth.currentUser;
+
+// FirebaseServices namespace for additional services
 export namespace FirebaseServices {
 
   export const get_user = async () => {
     const user = auth.currentUser
     if (user) {
-      return user
+      return user;
     }
-    return false
-  }
+    return false;
+  };
 
   export const is_logged_in = async () => {
     return new Promise((resolve) => {
@@ -57,7 +94,6 @@ export namespace FirebaseServices {
   };
 
   export const sign_out = async () => {
-    auth.signOut()
-  }
-
+    auth.signOut();
+  };
 }

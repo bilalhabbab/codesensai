@@ -320,4 +320,8 @@ const NAV_ITEMS_FOR_ANONYMOUS_USER: Array<NavItem> = [
     label: 'Problems',
     route: 'problems'
   },
+  {
+    label: 'Random',
+    route: 'random'
+  }
 ]
