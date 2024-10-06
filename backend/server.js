@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import OpenAI from 'openai';
+import secrets from './secrets.json' assert { type: 'json' };
 
 // Load environment variables
 dotenv.config();
@@ -18,7 +19,7 @@ app.get('/healthcheck', (req, res) => {
 
 // Initialize OpenAI client
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: secrets.open_ai,
 });
 
 // API endpoint for evaluating code
@@ -54,7 +55,7 @@ app.post('/evaluate-code', async (req, res) => {
     "thoughts": "Your overall thoughts on the code. Write a sentence or two (feel free to write more if needed) for each topic."
   }
   
-  Only provide the JSON response without any additional text.
+  Only provide the JSON response without any additional text, and if code is non-relevant, deduct  major marks everywhere.
   `;
   
       // Call OpenAI API

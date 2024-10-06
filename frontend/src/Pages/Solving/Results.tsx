@@ -1,4 +1,4 @@
-import { Container, Box, Text, Heading, Spinner } from '@chakra-ui/react';
+import { Container, Box, Text, Heading, Spinner, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -49,39 +49,31 @@ const Results = () => {
     analyzeCode();
   }, [code, task]);
 
-  if (loading) {
-    return (
-      <Container>
-        <Spinner size="xl" />
-        <Text>Analyzing code...</Text>
-      </Container>
-    );
-  }
-
-  if (error) {
-    return (
-      <Container>
-        <Text color="red.500">{error}</Text>
-      </Container>
-    );
-  }
-
-  if (!evaluation) {
-    return (
-      <Container>
-        <Text>No evaluation results available.</Text>
-      </Container>
-    );
-  }
+  const bgColor = useColorModeValue('gray.100','gray.700');
 
   return (
     <>
+    {loading ? 
+        (<Container>
+          <Spinner size="xl" />
+          <Text>Analyzing code...</Text>
+        </Container>)
+      : error ?
+        (<Container>
+          <Text color="red.500">{error}</Text>
+        </Container>)
+      : !evaluation ?
+        (<Container>
+          <Text>No evaluation results available.</Text>
+        </Container>)
+      :
+      (<>
       <Heading as="h2" size="lg" mb={4}>Evaluation Results</Heading>
 
       {/* Display the code */}
       <Box mb={4}>
         <Heading as="h3" size="md" mb={2}>Submitted Code</Heading>
-        <Box whiteSpace="pre-wrap" bg="gray.100" p={4} borderRadius="md" border="1px solid gray">
+        <Box whiteSpace="pre-wrap" bg={bgColor} p={4} borderRadius="md" border="1px solid gray">
           {code}
         </Box>
       </Box>
@@ -89,7 +81,7 @@ const Results = () => {
       {/* Display the task */}
       <Box mb={4}>
         <Heading as="h3" size="md" mb={2}>Task Description</Heading>
-        <Box whiteSpace="pre-wrap" bg="gray.100" p={4} borderRadius="md" border="1px solid gray">
+        <Box whiteSpace="pre-wrap" bg={bgColor} p={4} borderRadius="md" border="1px solid gray">
           {task}
         </Box>
       </Box>
@@ -106,10 +98,12 @@ const Results = () => {
 
       {/* Display the evaluator's thoughts */}
       <Box>
-        <Heading as="h3" size="md" mb={2}>Evaluator's Thoughts</Heading>
+        <Heading as="h3" size="md" mb={2}>SensAI's Thoughts</Heading>
         <Text>{evaluation.thoughts}</Text>
       </Box>
-    </>
+    </>)
+  }
+  </>
   );
 };
 
