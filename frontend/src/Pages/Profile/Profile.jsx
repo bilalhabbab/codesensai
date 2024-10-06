@@ -7,9 +7,9 @@ import { UserContext } from '../../Utils/UserContext';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const Profile = () => {
-  const [profileData, setProfileData] = useState<any>(null);
+  const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const Profile = () => {
   const color2 = useColorModeValue('gray.100', 'gray.500');
   let total = 0
   let count = 0
-  const problems = Object.keys(profileData?.problems).map((problem: any, index: number) => {
+  const problems = Object.keys(profileData?.problems).map((problem, index) => {
     total += profileData.problems[problem]
     count += 1
     return (

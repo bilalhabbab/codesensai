@@ -69,11 +69,11 @@ const Problems = () => {
       // Status filter logic
       let matchesStatus = true;
       if (selectedStatus === 'attempted') {
-        matchesStatus = userProblems.hasOwnProperty(problem.number);
+        matchesStatus = userProblems.hasOwnProperty(problem.number.toString());
       } else if (selectedStatus === 'new') {
-        matchesStatus = !userProblems.hasOwnProperty(problem.number);
+        matchesStatus = !userProblems.hasOwnProperty(problem.number.toString());
       } else if (selectedStatus === 'solved') {
-        matchesStatus = userProblems[problem.number] >= 90;
+        matchesStatus = userProblems[problem.number.toString()] >= 90;
       }
 
       return matchesDifficulty && matchesType && matchesStatus;
@@ -84,7 +84,7 @@ const Problems = () => {
 
   filteredProblems.sort((a, b) => a.number - b.number);
   const problem_jsx = filteredProblems.map((problem) => {
-    const isAttempted = userProblems.hasOwnProperty(problem.number);
+    const isAttempted = userProblems.hasOwnProperty((problem.number).toString());
     return (
       <Problem
         key={problem.number}
