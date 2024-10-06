@@ -28,10 +28,9 @@ greet("Paul")
   `,
 };
 
-function CodeBox() {
+function CodeBox({minutes, seconds, code, setCode, onSubmit}) {
   const [language, setLanguage] = useState("javascript");
   const editorRef = useRef(null);
-  const [code, setCode] = useState(CODE_TEMPLATES.javascript);
 
   const handleLanguageChange = (newLanguage) => {
     setLanguage(newLanguage);
@@ -43,15 +42,28 @@ function CodeBox() {
     editor.focus();
   };
 
+  const handleEditorChange = (value) => {
+    setCode(value);
+  };
+
   return (
     <>
-    <Flex color={useColorModeValue('black', 'white')} bgColor={useColorModeValue('white', '#1e1e1e')} flexDir='column' w="50%" borderRadius='20px' p={5}>
-      <Box height="70%">
-        <LangSwitch language={language} onSelect={handleLanguageChange} />
-        <Editor height="50vh" theme={useColorModeValue('vs-light', 'vs-dark')} options={{minimap: { enabled: false }, }} language={language} value={code} ref={editorRef} onMount={handleEditorMount}/>
-      </Box>
-      {<Output editorRef={editorRef} language={language} />}
-    </Flex>
+      <Flex color={useColorModeValue('black', 'white')} bgColor={useColorModeValue('white', '#1e1e1e')} flexDir='row' w="100%" borderRadius='20px' p={5}>
+        <Box height="100%" w="50%">
+          <LangSwitch language={language} onSelect={handleLanguageChange} />
+          <Editor
+            height="80vh"
+            theme={useColorModeValue('vs-light', 'vs-dark')}
+            options={{ minimap: { enabled: false } }}
+            language={language}
+            value={code}
+            ref={editorRef}
+            onMount={handleEditorMount}
+            onChange={handleEditorChange}
+          />
+        </Box>
+        <Output editorRef={editorRef} language={language} minutes={minutes} seconds={seconds} onSubmit={onSubmit} />
+      </Flex>
     </>
   );
 }

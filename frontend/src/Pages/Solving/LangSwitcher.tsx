@@ -23,7 +23,7 @@ interface LangSwitchProps {
 const LangSwitch = ({ language, onSelect } : LangSwitchProps) => {
     const languages = Object.entries(LANG_VERSIONS);
     return (
-      <Flex w='100%' mb={1} justifyItems='center' >
+      <Flex w='100%' mb={5} justifyItems='center' >
         <Menu>
           <MenuButton as={Button} h="30px" fontSize='sm'>{language} ∨</MenuButton>
           <MenuList>
