@@ -16,6 +16,7 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
+  Image,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -100,6 +101,7 @@ export const NavBar = () => {
         </Flex>
         <Center>
           <Spacer width={"40px"}></Spacer>
+          <Image src={'images/SensAI_logo.png'} alt="Logo" width="50px" height="50px" />
           <Text
               textTransform={'uppercase'}
               display="inline-block"
@@ -109,7 +111,7 @@ export const NavBar = () => {
               p={2}
               alignSelf={'flex-start'}
               rounded={'md'}>
-            LeetAI
+            CodeSensAI
           </Text>
         </Center>
         <Flex
@@ -317,11 +319,11 @@ const NAV_ITEMS_FOR_ANONYMOUS_USER: Array<NavItem> = [
     route: 'home'
   },
   {
+    label: 'Random',
+    route: 'random'
+  },
+  {
     label: 'Problems',
     route: 'problems'
   },
-  {
-    label: 'Random',
-    route: 'random'
-  }
 ]
