@@ -97,7 +97,7 @@ const Solving = () => {
           <ModalHeader>Are You Ready!?</ModalHeader>
           <ModalBody pb={6}>
             <Text>
-              You will have 40 minutes to complete the task. Upon submission, or 
+              You will have 25 minutes to complete the task. Upon submission, or 
               when the time runs out, your code will be evaluated. you will be given
               feedback based on your comments, efficiency, and readability.
               Make sure you write down your comments as if you are explaining

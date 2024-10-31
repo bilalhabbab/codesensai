@@ -3,3 +3,4 @@
 /backend/.env
 /backend/secrets.json
 /backend/node_modules
+.env

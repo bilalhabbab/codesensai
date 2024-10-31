@@ -30,6 +30,7 @@ import { FirebaseServices, auth, currentUser } from "../../Utils/firebase"
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { User } from 'firebase/auth';
+import SensAI_Logo from './assets/SensAI_Logo.png';
 
 interface navigation_items_props {
   items: Array<NavItem>
@@ -101,7 +102,7 @@ export const NavBar = () => {
         </Flex>
         <Center>
           <Spacer width={"40px"}></Spacer>
-          <Image src={'images/SensAI_logo.png'} alt="Logo" width="50px" height="50px" />
+          <Image src={SensAI_Logo} alt="Logo" width="50px" height="50px" />
           <Text
               textTransform={'uppercase'}
               display="inline-block"

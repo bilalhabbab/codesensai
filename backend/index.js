@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors';
+// import cors from 'cors';
 import OpenAI from 'openai';
 import secrets from './secrets.json' assert { type: 'json' };
 
@@ -8,7 +8,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
 const openai = new OpenAI({

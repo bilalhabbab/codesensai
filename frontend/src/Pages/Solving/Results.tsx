@@ -3,7 +3,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { auth, db } from '../../Utils/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 interface EvaluationResponse {
   comments: number;
@@ -38,36 +38,48 @@ const Results = () => {
   useEffect(() => {
     const analyzeCode = async () => {
       try {
-        const response = await fetch('http://localhost:5000/evaluate-code', {
+        const user = auth.currentUser;
+        if (!user) {
+          setError('Error fetching code evaluation. User not authenticated.');
+          setLoading(false);
+          return;
+        }
+  
+        // Get the token from Firebase
+        const token = await user.getIdToken();
+  
+        const response = await fetch('https://codesensaibackend1-1ugs5frv.b4a.run/evaluate-code', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Add the token to the headers
           },
           body: JSON.stringify({
-            coding_language: 'javascript', // Change as needed or make dynamic
+            coding_language: 'Dont worry about this', // Change as needed or make dynamic
             task_description: task,
             user_input: code,
           }),
         });
-
+  
         if (!response.ok) {
           throw new Error('Failed to fetch analysis from server');
         }
-
+  
         const data: EvaluationResponse = await response.json();
         setEvaluation(data);
         setLoading(false);
-
-        // After getting the evaluation, update the user's Firestore document
+  
+        // Update the Firestore document with the new score
         await updateUserProblemScore(problemNumber, data.overall);
       } catch (error) {
         setError('Error fetching code evaluation. Please try again.');
         setLoading(false);
       }
     };
-
+  
     analyzeCode();
   }, [code, task, problemNumber]);
+  
 
   // Function to update the user's problems in Firestore
   const updateUserProblemScore = async (problemNumber: any, overallScore: any) => {
