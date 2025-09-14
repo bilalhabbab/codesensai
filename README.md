@@ -14,4 +14,4 @@ CodeSensai is a LeetCode-style practice platform: solve coding problems under a 
 	•	Frontend: React + code editor (Monaco), router, simple state store
  
 Feel free to test it on our live website!
-Codesensai.study
+[CodeSensai](https://codesensai.study)
