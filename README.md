@@ -12,3 +12,5 @@ CodeSensai is a LeetCode-style practice platform: solve coding problems under a 
 	•	Backend: Node.js (Express/Fastify), Postgres (problems, users, submissions), Redis + queue (job runs), Docker-isolated runners
 	•	AI: OpenAI/Anthropic for feedback generation
 	•	Frontend: React + code editor (Monaco), router, simple state store
+Feel free to test it on our live website!
+Codesensai.study
